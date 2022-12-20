@@ -142,8 +142,20 @@ var generateCmd = &cobra.Command{
 				fmt.Println(palette)
 			case "T":
 				// Triadic
+				var palette[5]HSVColor
+				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[1] = HSVColor{fixAngle(palette[0].h - 120), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[2] = HSVColor{fixAngle(palette[0].h + 120), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[3] = HSVColor{fixAngle(palette[rand.Intn(2)].h), rand.Intn(100), rand.Intn(100)}
+				palette[4] = HSVColor{fixAngle(palette[rand.Intn(2)].h), rand.Intn(100), rand.Intn(100)}
+				fmt.Println(palette)
 			case "S":
 				// Square
+				var palette[4]HSVColor
+				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[1] = HSVColor{fixAngle(palette[0].h + 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[2] = HSVColor{fixAngle(palette[0].h - 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[3] = HSVColor{fixAngle(palette[0].h + 180), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 			default:
 				// Best looking color scheme out of the 5 is default
 		}
