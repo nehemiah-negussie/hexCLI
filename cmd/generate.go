@@ -96,6 +96,17 @@ var generateCmd = &cobra.Command{
 
 			case "A":
 				// Analgous
+				var palette[5]HSVColor
+
+				palette[2] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				baseHue := palette[2].h 
+				palette[0] = HSVColor{baseHue - 60, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[1] = HSVColor{baseHue - 30, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[3] = HSVColor{baseHue + 30, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[4] = HSVColor{baseHue + 60, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+
+				fmt.Println(palette)
+				
 			case "C":
 				// Complementary
 			case "T":
