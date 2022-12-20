@@ -156,6 +156,7 @@ var generateCmd = &cobra.Command{
 				palette[1] = HSVColor{fixAngle(palette[0].h + 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[2] = HSVColor{fixAngle(palette[0].h - 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[3] = HSVColor{fixAngle(palette[0].h + 180), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				fmt.Println(palette)
 			default:
 				// Best looking color scheme out of the 5 is default
 		}
