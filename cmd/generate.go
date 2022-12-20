@@ -57,7 +57,30 @@ func HSVToRGB(h, s, v int) (r, g, b int) {
 	return
 }
 
+func fixAngle (angle int) (fixed int) {
+	fixed = angle
+	// if the angle is between 0 and 360 its ok but if not
+	if angle <= 360 && angle >= 0 {
+		return angle
+	}
+	
+	if angle < 0 {
+		fixed = angle
+		for fixed < 0{
+			fixed += 360
+		}
+		return
+	}
 
+	if angle > 0 {
+		fixed = angle
+		for fixed > 360{
+			fixed -= 360
+		}
+		return
+	}
+	return
+}
 // generateCmd represents the color palette generation command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
@@ -100,15 +123,23 @@ var generateCmd = &cobra.Command{
 
 				palette[2] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
 				baseHue := palette[2].h 
-				palette[0] = HSVColor{baseHue - 60, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
-				palette[1] = HSVColor{baseHue - 30, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
-				palette[3] = HSVColor{baseHue + 30, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
-				palette[4] = HSVColor{baseHue + 60, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[0] = HSVColor{fixAngle(baseHue - 60), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[1] = HSVColor{fixAngle(baseHue - 30), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[3] = HSVColor{fixAngle(baseHue + 30), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[4] = HSVColor{fixAngle(baseHue + 60), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
 
 				fmt.Println(palette)
 				
 			case "C":
 				// Complementary
+				var palette[5]HSVColor
+				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
+				palette[3] = HSVColor{fixAngle(palette[0].h + 180), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[1] = HSVColor{palette[0].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[2] = HSVColor{palette[0].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[4] = HSVColor{palette[3].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+
+				fmt.Println(palette)
 			case "T":
 				// Triadic
 			case "S":
