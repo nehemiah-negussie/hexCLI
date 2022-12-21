@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"time"
 	"github.com/spf13/cobra"
+	"github.com/gookit/color"
 )
 
 type HSVColor struct{
@@ -18,42 +19,46 @@ type HSVColor struct{
 	v int
 }
 
-func HSVToRGB(h, s, v int) (r, g, b int) {
-	c := v * s
-	x := int(float64(c) * (1 - math.Abs(float64((h/60)%2-1))))
-	m := v - c
+func HSVToRGB (color HSVColor) (r, g, b int){
+	h := float64(color.h)
+	s := float64(color.s) / 100
+	v := float64(color.v) / 100
+
+	M := 255 * v
+	m := M * (1 - s)
+	z := (M-m) * (1 - math.Abs(math.Mod((h/60), 2) - 1))
+
+	q := int(M)
+	w := int(m)
+	e := int(z)
 
 	switch {
 	case h >= 0 && h < 60:
-		r = c
-		g = x
-		b = 0
+		r = q
+		g = w + e
+		b = w
 	case h >= 60 && h < 120:
-		r = x
-		g = c
-		b = 0
+		r = w + e
+		g = q
+		b = w
 	case h >= 120 && h < 180:
-		r = 0
-		g = c
-		b = x
+		r = w
+		g = q
+		b = w + e
 	case h >= 180 && h < 240:
-		r = 0
-		g = x
-		b = c
+		r = w
+		g = w + e
+		b = q
 	case h >= 240 && h < 300:
-		r = x
-		g = 0
-		b = c
+		r = w + e
+		g = w
+		b = q
 	case h >= 300 && h < 360:
-		r = c
-		g = 0
-		b = x
+		r = q
+		g = w
+		b = w + e
 	}
-
-	r = (r + m) * 255
-	g = (g + m) * 255
-	b = (b + m) * 255
-
+	
 	return
 }
 
@@ -74,7 +79,7 @@ func fixAngle (angle int) (fixed int) {
 
 	if angle > 0 {
 		fixed = angle
-		for fixed > 360{
+		for fixed >= 360{
 			fixed -= 360
 		}
 		return
@@ -98,6 +103,7 @@ var generateCmd = &cobra.Command{
 		if scheme != "" {
 			fmt.Println("Test")
 		}
+		var palette[5]HSVColor
 		// Switch statement for each color scheme (algorithms to be added in the future)
 		switch scheme {
 			case "":
@@ -108,18 +114,15 @@ var generateCmd = &cobra.Command{
 				// Pick a certain hue
 				hue := rand.Intn(360)
 				// Create an array to store the 5 color palette
-				var palette[5]HSVColor
 
 				// Loop through and add all 5 colors with random saturation and values
 				for i:=0; i < 5; i++ {
-					palette[i] = HSVColor{hue, rand.Intn((100-60) + 1) + 60, rand.Intn((100-80) + 1) + 80}	
+					palette[i] = HSVColor{hue, rand.Intn((100-30) + 1) + 30, rand.Intn((100-30) + 1) + 30}	
 				}
 				
-				fmt.Println(palette)
 
 			case "A":
 				// Analgous
-				var palette[5]HSVColor
 
 				palette[2] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
 				baseHue := palette[2].h 
@@ -132,22 +135,21 @@ var generateCmd = &cobra.Command{
 				
 			case "C":
 				// Complementary
-				var palette[5]HSVColor
 				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}	
 				palette[3] = HSVColor{fixAngle(palette[0].h + 180), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
-				palette[1] = HSVColor{palette[0].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
-				palette[2] = HSVColor{palette[0].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
-				palette[4] = HSVColor{palette[3].h, rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
+				palette[1] = HSVColor{palette[0].h, rand.Intn((100-40) + 1) + 40, rand.Intn((100-40) + 1) + 40}
+				palette[2] = HSVColor{palette[0].h, rand.Intn((100-40) + 1) + 40, rand.Intn((100-40) + 1) + 40}
+				palette[4] = HSVColor{palette[3].h, rand.Intn((100-40) + 1) + 40, rand.Intn((100-40) + 1) + 40}
 
 				fmt.Println(palette)
 			case "T":
 				// Triadic
-				var palette[5]HSVColor
+				
 				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[1] = HSVColor{fixAngle(palette[0].h - 120), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[2] = HSVColor{fixAngle(palette[0].h + 120), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
-				palette[3] = HSVColor{fixAngle(palette[rand.Intn(2)].h), rand.Intn(100), rand.Intn(100)}
-				palette[4] = HSVColor{fixAngle(palette[rand.Intn(2)].h), rand.Intn(100), rand.Intn(100)}
+				palette[3] = HSVColor{fixAngle(palette[rand.Intn(2)].h),  rand.Intn((100-40) + 1) + 40, rand.Intn((100-40) + 1) + 40}
+				palette[4] = HSVColor{fixAngle(palette[rand.Intn(2)].h),  rand.Intn((100-40) + 1) + 40, rand.Intn((100-40) + 1) + 40}
 				fmt.Println(palette)
 			case "S":
 				// Square
@@ -159,6 +161,11 @@ var generateCmd = &cobra.Command{
 				fmt.Println(palette)
 			default:
 				// Best looking color scheme out of the 5 is default
+		}
+
+		for i:=0; i < 5; i++ {
+			r, g, b := HSVToRGB(palette[i])
+			color.RGB(uint8(r), uint8(g), uint8(b)).Println("Color", i+1)
 		}
 	},
 }
