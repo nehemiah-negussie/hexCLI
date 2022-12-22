@@ -153,7 +153,6 @@ var generateCmd = &cobra.Command{
 				fmt.Println(palette)
 			case "S":
 				// Square
-				var palette[4]HSVColor
 				palette[0] = HSVColor{rand.Intn(360), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[1] = HSVColor{fixAngle(palette[0].h + 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
 				palette[2] = HSVColor{fixAngle(palette[0].h - 90), rand.Intn((100-80) + 1) + 80, rand.Intn((100-80) + 1) + 80}
@@ -163,9 +162,13 @@ var generateCmd = &cobra.Command{
 				// Best looking color scheme out of the 5 is default
 		}
 
+		// Print out the palette with colored output
 		for i:=0; i < 5; i++ {
 			r, g, b := HSVToRGB(palette[i])
-			color.RGB(uint8(r), uint8(g), uint8(b)).Println("Color", i+1)
+			if r == 0 && g == 0 && b == 0{
+				continue
+			}
+			color.RGB(uint8(r), uint8(g), uint8(b)).Println("rgb: (", r, g, b, ")")
 		}
 	},
 }
