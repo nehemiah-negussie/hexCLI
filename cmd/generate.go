@@ -91,8 +91,26 @@ var generateCmd = &cobra.Command{
 	Long: `Choose between (M)onochromatic, (A)nalogous, (C)omplementary, (T)riadic, or (S)quare
 	using the --scheme flag.
 	
-	Ex. hexcli generate --scheme=M`,
+	Ex. hexcli generate --scheme=M
+	
+	Use --info for more info on the color schemes and common applications.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		info, _ := cmd.Flags().GetBool ("info")
+		if info {
+			fmt.Println(`
+			(M)onochromatic: Creates a cohesive, unified look by using variations of a single color. Great for single page design or design around a dominant theme.
+			
+			(A)nalogous: Uses colors that are adjacent to each other on the color wheel, creating a harmonious and cohesive look.
+			
+			(C)omplementary: Uses colors that are opposite each other on the color wheel, creating a bold, high-contrast look.
+			
+			(T)riadic: Uses colors that are evenly spaced around the color wheel. Great for high contrast designs.
+			
+			(S)quare: Uses four colors that are evenly spaced around the color wheel. Useful for finding a base color to work off of.`)
+			return
+		}
+
 		// Seed randomness with time
 		rand.Seed(time.Now().UnixNano())
 
@@ -182,6 +200,6 @@ var generateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(generateCmd)
 	generateCmd.Flags().String("scheme", "", "Color scheme choice between (M)onochromatic, (A)nalogous, (C)omplementary, (T)riadic, or (S)quare")
-
+	generateCmd.Flags().Bool("info", false, "Give more info on the applications of each color scheme")
 
 }
