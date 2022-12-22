@@ -1,5 +1,11 @@
 # hexCLI
-This tool allows you to easily create color palettes for your designs by choosing from a variety of color schemes. Simply use the `generate` command and specify the `--scheme` flag with your desired color scheme. You can choose from the following options:
+This tool allows you to easily create color palettes for your designs by choosing from a variety of color schemes. Simply use the `generate` command and specify the `--scheme` flag with your desired color scheme. 
+
+To gain a full experience, use a Terminal with support for true color so you can have outputs like this:
+
+![](https://github.com/nehemiah-negussie/hexCLI/blob/main/output.png?raw=true)
+
+You can choose from the following options:
 
 - **M**onochromatic: Creates a unified look by using variations of a single hue. Great for single page design.
 **![](https://lh5.googleusercontent.com/7TFNAdwfjP1_4LMNGP37fjTHE7UY2xi_UEWuHYNVPSIdw-yXHNqJR_rwomdSY3FxBoIQjaAiq6EA29nn8KH60NWWubiYGaLO1HxD9VD1tN-IbDcz9RiQxXQ6-E7aLLUJaSpHpZ5DvcMCCJyixkw0eIEry0buSo2ynxKrdfXvA_ITduJzEJibUbwuTOu8Hw)**
